@@ -41,8 +41,9 @@
     if (project.medium === 'threejs') {
       const link = projectLinks.parseThreeUrl(project.source);
       return {
-        src: `./sketch.html?medium=threejs&source=${encodeURIComponent(link.source)}&title=${encodeURIComponent(project.title)}`,
+        src: project.openInNewTab ? link.source : `./sketch.html?medium=threejs&source=${encodeURIComponent(link.source)}&title=${encodeURIComponent(project.title)}`,
         original: link.source,
+        direct: project.openInNewTab === true,
         requiresCamera: false,
         label: 'three.js',
         code: '3D'
@@ -110,8 +111,13 @@
     visible.forEach((project, index) => {
       const preview = projectPreview(project);
       const article = document.createElement('article'); article.className = 'project-card'; article.style.animationDelay = `${index * 25}ms`;
-      const button = document.createElement('button'); button.className = 'project-button'; button.type = 'button'; button.setAttribute('aria-label', `Open ${project.title}`); button.setAttribute('aria-haspopup', 'dialog');
-      const cover = document.createElement('div'); cover.className = 'project-cover';
+      const button = document.createElement(preview.direct ? 'a' : 'button'); button.className = 'project-button'; button.setAttribute('aria-label', `Open ${project.title}${preview.direct ? ' in a new tab' : ''}`);
+      const cover = document.createElement(preview.direct ? 'a' : 'div'); cover.className = 'project-cover';
+      if (preview.direct) {
+        for (const link of [cover, button]) { link.href = preview.original; link.target = '_blank'; link.rel = 'noopener'; }
+        cover.style.display = 'block';
+        cover.setAttribute('aria-label', `Open ${project.title} in a new tab`);
+      } else { button.type = 'button'; button.setAttribute('aria-haspopup', 'dialog'); }
       if (project.image) {
         const image = document.createElement('img'); image.src = project.image; image.alt = `${project.title} — project preview`; image.width = 720; image.height = 520; image.loading = 'lazy'; cover.append(image);
       } else {
@@ -122,10 +128,10 @@
       if (project.note || !project.image) {const badge=document.createElement('span');badge.className='cover-note';badge.textContent=project.image?project.note:(project.note?`${project.note} · SCHEMATIC COVER`:'SCHEMATIC COVER');cover.append(badge);}
       const meta = document.createElement('div'); meta.className = 'project-meta'; const title = document.createElement('h3'); title.textContent = project.title; const openIcon=document.createElement('span');openIcon.textContent='↗';openIcon.setAttribute('aria-hidden','true');meta.append(title,openIcon);
       const type = document.createElement('p'); type.className = 'project-type'; type.textContent = `${project.type} / ${preview.label.toUpperCase()}`;
-      button.append(meta, type); button.addEventListener('click', () => openProject(project, button));
+      button.append(meta, type); if (!preview.direct) button.addEventListener('click', () => openProject(project, button));
       article.append(cover, button); grid.append(article);
-      if (cardPreviews) cardPreviews.register({ cover, title: project.title, src: preview.src, requiresCamera: preview.requiresCamera });
-      else cover.addEventListener('click', () => openProject(project, button));
+      if (!preview.direct && cardPreviews) cardPreviews.register({ cover, title: project.title, src: preview.src, requiresCamera: preview.requiresCamera });
+      else if (!preview.direct) cover.addEventListener('click', () => openProject(project, button));
     });
     const medium = media[activeFilter] || media.p5js;
     const mediumLabel = medium.label;

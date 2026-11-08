@@ -104,6 +104,7 @@
       instructions,
       ...(image ? { image } : {}),
       ...(medium === 'p5js' && raw.requiresCamera === true ? { requiresCamera: true } : {}),
+      ...(medium === 'threejs' && raw.openInNewTab === true ? { openInNewTab: true } : {}),
       source: link.source,
       remote: true
     };

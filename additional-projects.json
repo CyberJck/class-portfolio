@@ -39,5 +39,18 @@
     "source": "https://editor.p5js.org/jkan349/sketches/I1NmzFSh3",
     "remote": true,
     "image": "assets/p5-robot-preview.svg"
+  },
+  {
+    "id": "three-ad6e219c",
+    "title": "Firefly & SAM · 3D Window",
+    "original": "流萤与萨姆 · 立体机甲窗口",
+    "medium": "threejs",
+    "type": "HEAD TRACKING / INTERACTIVE 3D",
+    "description": "An eye-tracked window into a real-time 3D scene. Move your head to reveal depth around Firefly, SAM, a manga backdrop and an armored frame.",
+    "instructions": "Open the work, choose Control → Camera and allow access. Look straight ahead and recenter, then move gently left and right. Choose a 14- or 27-inch screen preset and adjust the camera offset if needed. Mouse mode is also available. Camera images stay on your device.",
+    "image": "https://cyberjck.github.io/firefly-sam-3d-window/preview.png",
+    "openInNewTab": true,
+    "source": "https://cyberjck.github.io/firefly-sam-3d-window/",
+    "remote": true
   }
 ]
